@@ -22,9 +22,9 @@ export const menuItem = [
         name: "Preview",
         icon: <FaRegEye />
     },
-    {
-        path: "/questionnairesList",
-        name: "My Questionnaires",
-        icon: <FaBookReader />
-    }
+    // {
+    //     path: "/questionnairesList",
+    //     name: "My Questionnaires",
+    //     icon: <FaBookReader />
+    // }
 ]
