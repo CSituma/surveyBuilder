@@ -2,7 +2,7 @@ import {
     FaPencilAlt,
     FaUserAlt,
     FaRegEye,
-    FaBookReader
+    //FaBookReader
 } from "react-icons/fa";
 
 export const menuItem = [

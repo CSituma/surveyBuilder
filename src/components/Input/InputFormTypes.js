@@ -10,7 +10,7 @@ const InputFormTypes = ({ formType }) => {
             <input type="radio" id="css" name="fav_language" value="CSS" />
             <label htmlFor="css">NO</label>
           </div>
-        ) : formType === "text" ? (
+        ) : formType === "Text" ? (
           <>
             <div className="Text">
               <div className="col-lg-12">
