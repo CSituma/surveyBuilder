@@ -4,6 +4,10 @@
 ## Available Scripts
 
 In the project directory, you can run:
+### `git clone`
+
+### `npm install
+
 
 ### `npm start`
 
