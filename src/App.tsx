@@ -7,7 +7,7 @@ import CreateQuestion from "./pages/createQuestion";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Preview from "./pages/Preview";
-import QuestionsList from "./pages/QuestionnairesList";
+import QuestionsListHolder from "./pages/QuestionsListHolder";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
 
           <Route path="/createQuestion" element={<CreateQuestion />} />
           <Route path="/preview" element={<Preview />} />
-          <Route path="/questionnairesList" element={<QuestionsList />} />
+          <Route path="/questionnairesList" element={<QuestionsListHolder />} />
         </Routes>
       </Sidebar>
     </Router>
