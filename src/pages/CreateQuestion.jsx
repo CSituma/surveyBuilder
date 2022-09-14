@@ -33,29 +33,23 @@ export default function CreateQuestion() {
   });
   const { questionnaireName, questionnaireDescription, question } = formData;
 
-
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
     setQuestionnaires(data);
   }, []);
 
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
   };
   const handleSelect = (e) => {
-    setAnswerType(e);  
+    setAnswerType(e);
   };
 
   const updateCurrentQuestionnaire = {
     questionnaireDescription,
     questionnaireName,
   };
-
-
 
   const edit = (e) => {
     Object.assign(formData, { answerType: answerType });
@@ -65,19 +59,16 @@ export default function CreateQuestion() {
     customAlertTimer(setIsFormSaved);
   };
 
-  const handleEdit =(e)=>{
+  const handleEdit = (e) => {
     e.preventDefault();
-    if ( checkIfElementExists(answerType)) {
+    if (checkIfElementExists(answerType)) {
       edit();
+      setFormData({ question: "", answerType: "" });
     } else {
       customAlertTimer(setFormError);
     }
-  }
+  };
 
-
-console.log({...formData, answerType:currentQuestionnaire.answerType});
-
-console.log(checkIfElementExists(answerType));
   const submit = () => {
     Object.assign(formData, { answerType: answerType });
     addToExistingStoredList("Questionnaires", formData);
@@ -88,8 +79,9 @@ console.log(checkIfElementExists(answerType));
   const handleSubmit = (e) => {
     try {
       e.preventDefault();
-      if ( checkIfElementExists(answerType)) {
+      if (checkIfElementExists(answerType)) {
         submit();
+        setFormData({ question: "", answerType: "" });
       } else {
         customAlertTimer(setFormError);
       }
@@ -136,7 +128,7 @@ console.log(checkIfElementExists(answerType));
                     name="questionnaireName"
                     id="questionnaireName"
                     data-toggle="tooltip"
-                    placeholder="Write Questionnaire Name"
+                    placeholder="Questionnaire Name"
                     data-placement="top"
                     title="Edit Questionnaire Name"
                     aria-label="Questionnaire Name Input"
@@ -150,11 +142,11 @@ console.log(checkIfElementExists(answerType));
                     onChange={handleChange}
                     value={questionnaireDescription}
                     name="questionnaireDescription"
-                    placeholder="Write a short Description of Questionnaire"
+                    placeholder="Write  short Description of Questionnaire"
                     id="questionnaireDescription"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="Write a short Description of Questionnaire"
+                    title="Write  short Description of Questionnaire"
                     aria-label="Questionnaire Description Input"
                     required
                   ></textarea>
