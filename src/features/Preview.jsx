@@ -95,7 +95,7 @@ export default function PreviewFeature() {
                     </div>
 
                     <div className="d-flex justify-content-between">
-                      <InputFormTypes formType={questionnaire?.answerType} />{" "}
+                      <InputFormTypes formType={questionnaire?.answerType} choices={questionnaire?.multipleChoices} />{" "}
                       <div>
                         <FaPencilAlt
                           className="m-3"

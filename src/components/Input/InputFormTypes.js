@@ -1,57 +1,61 @@
 
-const InputFormTypes = ({ formType }) => {
-    return (
-      <div>
-        {formType === "Yes/No" ? (
-          <div>
-            <input type="radio" id="html" name="fav_language" value="HTML" />
-            <label htmlFor="html">YES</label>
-            <br />
-            <input type="radio" id="css" name="fav_language" value="CSS" />
-            <label htmlFor="css">NO</label>
+const InputFormTypes = ({ formType, choices }) => {
+
+  console.log(choices.choices.map(choice => choice.name));
+  return (
+    <div>
+      {formType === "Yes/No" ? (
+        <div>
+          <input type="radio" id="html" name="fav_language" value="HTML" />
+          <label htmlFor="html">YES</label>
+          <br />
+          <input type="radio" id="css" name="fav_language" value="CSS" />
+          <label htmlFor="css">NO</label>
+        </div>
+      ) : formType === "Text" ? (
+        <>
+          <div className="Text">
+            <div className="col-lg-12">
+              <div className="input-group input-group-lg">
+                <input type="text" className="form-control input-lg" id="search-church"
+                  placeholder=""
+                  required />
+              </div>
+            </div>
           </div>
-        ) : formType === "Text" ? (
+
+        </>
+      ) :
+        formType === "Number" ? (
           <>
-            <div className="Text">
+            <div className="row">
               <div className="col-lg-12">
                 <div className="input-group input-group-lg">
-                  <input type="text" className="form-control input-lg" id="search-church"
-                    placeholder="" 
-                    required/>
+                  <input type="number" className="form-control input-lg" id="search-church"
+                    placeholder=""
+                    required />
                 </div>
               </div>
             </div>
-  
+
           </>
         ) :
-          formType === "Number" ? (
+          formType === "MultipleChoice" ? (
             <>
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="input-group input-group-lg">
-                    <input type="number" className="form-control input-lg" id="search-church"
-                      placeholder=""
-                      required />
-                  </div>
+              {choices.choices.map((choice, index) => (
+                <div className="form-check" key={index}>
+                  <input className="form-check-input" type="checkbox" value={choice.name} id="flexCheckDefault" />
+                  <label className="form-check-label" for="flexCheckDefault">
+                    {choice.name}
+                  </label>
                 </div>
-              </div>
-  
+              ))}
             </>
-          ) :
-            formType === "Multiple Choice" ? (
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="input-group input-group-lg">
-                    <input type="checkbox" className="form-control input-lg" id="search-church"
-                      placeholder="" />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
-      </div>
-    )
-  }
-  
-  export default InputFormTypes
+          ) : (
+            ""
+          )}
+    </div>
+  )
+}
+
+export default InputFormTypes

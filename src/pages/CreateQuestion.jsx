@@ -18,6 +18,7 @@ import {
 } from "../utils/HelperFunctions";
 import { FaEyeSlash } from "react-icons/fa";
 import CheckListModal from "../components/modal/checkListModal";
+import { useNavigate } from "react-router-dom";
 export default function CreateQuestion() {
   const [answerType, setAnswerType] = useState("");
   const [formError, setFormError] = useState(false);
@@ -26,14 +27,14 @@ export default function CreateQuestion() {
   const [Questionnaires, setQuestionnaires] = useState([]);
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     questionnaireName: currentQuestionnaire?.questionnaireName,
     question: currentQuestionnaire?.question,
     questionnaireDescription: currentQuestionnaire?.questionnaireDescription,
   });
   const { questionnaireName, questionnaireDescription, question } = formData;
-
+  
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
     setQuestionnaires(data);
@@ -80,6 +81,7 @@ export default function CreateQuestion() {
     addToExistingStoredList("Questionnaires", formData);
     createNewStorageItem("currentQuestionnaire", updateCurrentQuestionnaire);
     customAlertTimer(setIsFormSaved);
+    navigate("/preview");
   };
 
   const handleSubmit = (e) => {
