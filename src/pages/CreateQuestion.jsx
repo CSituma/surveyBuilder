@@ -10,6 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import {
   addToExistingStoredList,
+  checkIfElementExists,
   createNewStorageItem,
   customAlertTimer,
   getCurrentQuestionnaireName,
@@ -20,12 +21,11 @@ import CheckListModal from "../components/modal/checkListModal";
 import { useNavigate } from "react-router-dom";
 export default function CreateQuestion() {
   const [answerType, setAnswerType] = useState("");
-  const [isAnswerChoosen, setisAnswerChoosen] = useState(false);
   const [formError, setFormError] = useState(false);
   const [isFormSaved, setIsFormSaved] = useState(false);
   const currentQuestionnaire = getCurrentQuestionnaireName();
   const [Questionnaires, setQuestionnaires] = useState([]);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [formData, setFormData] = useState({
     questionnaireName: currentQuestionnaire?.questionnaireName,
     question: currentQuestionnaire?.question,
@@ -33,18 +33,21 @@ export default function CreateQuestion() {
   });
   const { questionnaireName, questionnaireDescription, question } = formData;
 
+
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
     setQuestionnaires(data);
   }, []);
 
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
   };
   const handleSelect = (e) => {
-    setisAnswerChoosen(true);
-    setAnswerType(e);
+    setAnswerType(e);  
   };
 
   const updateCurrentQuestionnaire = {
@@ -52,8 +55,9 @@ export default function CreateQuestion() {
     questionnaireName,
   };
 
+
+
   const edit = (e) => {
-    e.preventDefault();
     Object.assign(formData, { answerType: answerType });
     Questionnaires[currentQuestionnaire.index] = formData;
     createNewStorageItem("Questionnaires", Questionnaires);
@@ -61,7 +65,19 @@ export default function CreateQuestion() {
     customAlertTimer(setIsFormSaved);
   };
 
+  const handleEdit =(e)=>{
+    e.preventDefault();
+    if ( checkIfElementExists(answerType)) {
+      edit();
+    } else {
+      customAlertTimer(setFormError);
+    }
+  }
 
+
+console.log({...formData, answerType:currentQuestionnaire.answerType});
+
+console.log(checkIfElementExists(answerType));
   const submit = () => {
     Object.assign(formData, { answerType: answerType });
     addToExistingStoredList("Questionnaires", formData);
@@ -72,7 +88,7 @@ export default function CreateQuestion() {
   const handleSubmit = (e) => {
     try {
       e.preventDefault();
-      if (isAnswerChoosen) {
+      if ( checkIfElementExists(answerType)) {
         submit();
       } else {
         customAlertTimer(setFormError);
@@ -218,7 +234,7 @@ export default function CreateQuestion() {
                       <Button
                         className=" form-control form-control-lg bg-black text-white info text-center "
                         type="button"
-                        onClick={edit}
+                        onClick={handleEdit}
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Click to save Question"
