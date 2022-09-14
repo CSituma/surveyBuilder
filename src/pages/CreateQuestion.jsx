@@ -18,13 +18,14 @@ import {
 } from "../utils/HelperFunctions";
 import { FaEyeSlash } from "react-icons/fa";
 import CheckListModal from "../components/modal/checkListModal";
-import { useNavigate } from "react-router-dom";
 export default function CreateQuestion() {
   const [answerType, setAnswerType] = useState("");
   const [formError, setFormError] = useState(false);
   const [isFormSaved, setIsFormSaved] = useState(false);
   const currentQuestionnaire = getCurrentQuestionnaireName();
   const [Questionnaires, setQuestionnaires] = useState([]);
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(true);
   //const navigate = useNavigate();
   const [formData, setFormData] = useState({
     questionnaireName: currentQuestionnaire?.questionnaireName,
@@ -46,14 +47,19 @@ export default function CreateQuestion() {
     setAnswerType(e);
   };
 
+  
+  const multipleChoices = getLocalStorageItem("multipleChoices");
+  
   const updateCurrentQuestionnaire = {
     questionnaireDescription,
     questionnaireName,
+    answerType,
+    question,
   };
 
   const edit = (e) => {
-    Object.assign(formData, { answerType: answerType });
-    Questionnaires[currentQuestionnaire.index] = formData;
+    Object.assign(formData, { answerType: answerType },{multipleChoices});
+    Questionnaires[currentQuestionnaire.indexValue] = formData;
     createNewStorageItem("Questionnaires", Questionnaires);
     createNewStorageItem("currentQuestionnaire", updateCurrentQuestionnaire);
     customAlertTimer(setIsFormSaved);
@@ -70,7 +76,7 @@ export default function CreateQuestion() {
   };
 
   const submit = () => {
-    Object.assign(formData, { answerType: answerType });
+    Object.assign(formData, { answerType: answerType },{multipleChoices});
     addToExistingStoredList("Questionnaires", formData);
     createNewStorageItem("currentQuestionnaire", updateCurrentQuestionnaire);
     customAlertTimer(setIsFormSaved);
@@ -194,7 +200,10 @@ export default function CreateQuestion() {
                       <Dropdown.Item eventKey="Text">Text</Dropdown.Item>
                       <Dropdown.Item eventKey="Number">Number</Dropdown.Item>
                       <Dropdown.Item eventKey="Yes/No">Yes/No </Dropdown.Item>
-                      <Dropdown.Item eventKey="MultipleChoice">
+                      <Dropdown.Item
+                        eventKey="MultipleChoice"
+                        onClick={handleShow}
+                      >
                         Multiple Choice
                       </Dropdown.Item>
                       <Dropdown.Divider />
@@ -202,15 +211,8 @@ export default function CreateQuestion() {
                     </DropdownButton>
                   </div>
 
-                  {formData.answerType === "Multiple Choice" ? (
-                    <CheckListModal />
-                  ) : (
-                    ""
-                  )}
-
                   <div className="card-body">
-                    {!currentQuestionnaire?.index &&
-                    !currentQuestionnaire?.question ? (
+                    {!currentQuestionnaire?.indexValue ? (
                       <Button
                         className=" form-control form-control-lg bg-black info text-white text-center "
                         type="submit"
@@ -239,6 +241,16 @@ export default function CreateQuestion() {
                   </div>
                 </form>
               </Card.Body>
+              {answerType === "MultipleChoice" ? (
+                <CheckListModal
+                  handleShow={handleShow}
+                  setShow={setShow}
+                  show={show}
+                  question={question}
+                />
+              ) : (
+                ""
+              )}
             </Card>
           </Col>
         </Row>

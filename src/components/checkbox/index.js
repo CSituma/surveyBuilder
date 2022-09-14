@@ -1,56 +1,66 @@
 import { useState } from "react";
+import { Alert, Button } from "react-bootstrap";
 import {
   FaPlus,
   FaRegTrashAlt,
 } from "react-icons/fa";
+import { addToExistingStoredList, createNewStorageItem, customAlertTimer, deleteOneItem, } from "../../utils/HelperFunctions";
 
-import CheckList from "./checkList";
 
-const CheckBox = () => {
+const CheckBox = ({ handleClose }) => {
+
   const [inputFields, setInputFields] = useState([
     { name: '' }
   ])
+  const [isDeleted, setIsDeleted] = useState(false);
+
 
   const handleFormChange = (index, event) => {
     let data = [...inputFields];
     data[index][event.target.name] = event.target.value;
     setInputFields(data);
   }
+
   const addNewFields = () => {
     let newfield = { name: '' }
-
     setInputFields([...inputFields, newfield])
   }
 
 
-  const submit = (e) => {
-    e.preventDefault();
+  const deleteField = (index, e) => {
+    inputFields[index][e.target.name] = e.target.value;
+    deleteOneItem(inputFields, index);
+    customAlertTimer(setIsDeleted);
+  }
+
+  const submit = () => {
+    createNewStorageItem("multipleChoices", {choices:inputFields});
+    handleClose();
   }
 
   return (
     <div>
+      {isDeleted ? <Alert variant="success"> Successfully Deleted</Alert> : ''}
 
       <>
-
-        <form onsubmit={submit}>
+        <form id="checkOptions">
           {inputFields.map((input, index) => {
             return (
               <div className="row" key={index}>
-                <CheckList checkList={[input?.name]} />
+
                 <div className="col-12">
                   <div className="d-flex flex-fill ">
 
                     <input type="text"
                       id="vehicle1"
                       name="name"
-                      className="text-center flex-fill form-control prop-field"
-                      placeholder=" Type Choices e.g- Short Coffee"
+                      className="text-center flex-fill form-control prop-field m-1"
+                      placeholder=" Answer"
                       value={input.name}
                       onChange={event => handleFormChange(index, event)} />
                     <div className="input-group-btn">
-                    
-                        <button type="submit" className="btn btn-danger"> <FaRegTrashAlt /></button>
-                      
+
+                      <Button type="button" className="btn btn-danger m-1" onClick={(event) => deleteField(index, event)}> <FaRegTrashAlt /></Button>
 
                     </div>
 
@@ -62,12 +72,19 @@ const CheckBox = () => {
             )
           })}
 
-
         </form>
+
         <div >
-          <div className="input-group-btn">
-            <button onClick={addNewFields} className="btn btn-primary"> <FaPlus />Add Choices</button>
+          <div className="input-group-btn ">
+            <button onClick={addNewFields} className="btn btn-secondary "> <FaPlus />Answer</button>
           </div>
+          <Button onClick={submit}
+            className="flex-fill form-control prop-field p-3 shadow-lg mb-5 rounded"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Save list of checkoptions"
+            variant="primary"> Save</Button>
+
 
         </div>
 

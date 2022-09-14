@@ -28,7 +28,7 @@ export default function PreviewFeature() {
   const editItem = (index, event) => {
     Questionnaires[index][event.target.name] = event.target.value;
     Object.assign(Questionnaires[index], { index: index });
-    addToExistingStoredList("currentQuestionnaire", Questionnaires[index]);
+    addToExistingStoredList("currentQuestionnaire", {indexValue:Questionnaires[index]});
     navigate("/createQuestion", { replace: true });
   };
 

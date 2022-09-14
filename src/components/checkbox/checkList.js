@@ -1,20 +1,24 @@
 
-const CheckList = ({ checkList }) => {
-    console.log(checkList);
-    
-        return (
-            <div>
-                {checkList.map((checkItem,index) => (
-                    <div key={index}>
-    
-                        <input type="checkbox" id={checkItem}  name={checkItem} value={checkItem} />
-                        <label htmlFor={checkItem}> {checkItem}</label>
-                    </div>
-    
+import {  ListGroup } from 'react-bootstrap'
+
+function CheckBox({ CheckList }) {
+
+
+    return (
+        <div>
+            <ListGroup variant="flush">
+
+                {CheckList?.map((checkItem, index) => (
+                    <ListGroup.Item key={index}>
+                        {checkItem}
+                    </ListGroup.Item>
+
                 ))}
-    
-            </div>
-        )
-    }
-    
-    export default CheckList
+
+            </ListGroup>
+
+        </div>
+    )
+}
+
+export default CheckBox
