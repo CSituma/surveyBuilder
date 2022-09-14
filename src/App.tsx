@@ -1,9 +1,8 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import NavbarComponent from "./components/Navbar/Index";
+import NavbarComponent from "./components/navbar/Index";
 
-import Sidebar from "./components/Navbar/Sidebar";
-import CreateQuestion from "./pages/createQuestion";
-
+import Sidebar from "./components/navbar/sidebar";
+import CreateQuestion from "./pages/CreateQuestion";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Preview from "./pages/Preview";
@@ -20,7 +19,7 @@ function App() {
 
           <Route path="/createQuestion" element={<CreateQuestion />} />
           <Route path="/preview" element={<Preview />} />
-          <Route path="/questionnairesList" element={<QuestionsListHolder />} />
+          <Route path="/myquestionnaires" element={<QuestionsListHolder />} />
         </Routes>
       </Sidebar>
     </Router>

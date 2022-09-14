@@ -47,8 +47,6 @@ export const checkLocalStorageKey = (key) => {
     }
 }
 
-
-
 export const getLocalStorageItem = (key) => {
     const storedItem = localStorage?.getItem(key);
     try {
@@ -60,8 +58,6 @@ export const getLocalStorageItem = (key) => {
       // TODO: better error handling
     }
   
-
-
 }
 
 export function addToExistingStoredList(key, value) {

@@ -3,11 +3,9 @@ import Navbar from "react-bootstrap/Navbar";
 //import { useUserContextWrapper } from "../Context/UserContextWrapper";
 import { useEffect, useState } from "react";
 
-import { Nav} from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 import { menuItem } from "../../utils/Menuitems";
 import { useNavigate } from "react-router-dom";
-;
-
 function NavbarComponent() {
   const [user, setuser] = useState("");
   const navigate = useNavigate();
@@ -15,11 +13,12 @@ function NavbarComponent() {
 
   useEffect(() => {
     const userdata = localStorage.getItem("User");
-    setuser(userdata!);
+    setuser(userdata);
   }, []);
 
   function logout() {
-    localStorage.removeItem("User");
+
+    localStorage.clear();
     return navigate("/");
   }
 

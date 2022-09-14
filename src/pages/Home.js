@@ -54,7 +54,7 @@ const Home = () => {
           id="viewQuestionnaireBtn"
           aria-label="View Questionnaire Button"
         >
-         <a href="/qustionnairelist" className="text-white texxt-decoration-none">View my Questionnaires</a>
+         <a href="/myquestionnaires" className="text-white texxt-decoration-none">View my Questionnaires</a>
         </Button>
       </div>
     </div>
