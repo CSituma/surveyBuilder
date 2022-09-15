@@ -61,7 +61,7 @@ export default function CreateQuestion() {
     question,
   };
 
-  const currentQuestionnaireIndex =Questionnaires.map(question => question.id).indexOf(currentQuestion.id)
+  const currentQuestionnaireIndex =Questionnaires?.map(question => question.id).indexOf(currentQuestion?.id)
 
   const edit = (e) => {
     Object.assign(formData, { answerType: answerType }, { multipleChoices });
