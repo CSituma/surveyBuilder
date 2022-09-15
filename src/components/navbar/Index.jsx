@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 function NavbarComponent() {
   const [user, setuser] = useState("");
   const navigate = useNavigate();
-  //const loggedInUser = useUserContextWrapper();
+
+ //const loggedInUser = useUserContextWrapper();
 
   useEffect(() => {
     const userdata = localStorage.getItem("User");

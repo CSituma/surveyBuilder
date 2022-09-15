@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import { Modal, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { checkLocalStorageKey, createNewStorageItem } from "../../utils/HelperFunctions";
@@ -26,7 +26,7 @@ export default function InputModal(props) {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value
-    }))
+    }));
   }
 
   ////find new value of formInputName i.e- value of userName from formData object
@@ -34,19 +34,16 @@ export default function InputModal(props) {
   const formError = loginValue.length <= 3;
 
 
-
-
   function submit() {
-    createNewStorageItem('Questionnaire', []);
     if (formInputName === "userName") {
 
       localStorage.setItem('User', loginValue);
       navigate("./home");
-      window.location.reload();
+
 
     } if (formInputName === "questionnaireName") {
 
-      createNewStorageItem('currentQuestionnaire', formData);
+      createNewStorageItem('currentQuestion', formData);
       return navigate("/createQuestion");
     }
   }

@@ -13,8 +13,9 @@ import {
   checkIfElementExists,
   createNewStorageItem,
   customAlertTimer,
-  getCurrentQuestionnaireName,
+  getcurrentQuestionName,
   getLocalStorageItem,
+  id,
 } from "../utils/HelperFunctions";
 import { FaEyeSlash } from "react-icons/fa";
 import CheckListModal from "../components/modal/checkListModal";
@@ -23,22 +24,30 @@ export default function CreateQuestion() {
   const [answerType, setAnswerType] = useState("");
   const [formError, setFormError] = useState(false);
   const [isFormSaved, setIsFormSaved] = useState(false);
-  const currentQuestionnaire = getCurrentQuestionnaireName();
+  const currentQuestion = getcurrentQuestionName();
   const [Questionnaires, setQuestionnaires] = useState([]);
+  const [multipleChoices, setMultipleChoices] = useState([]);
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
+ 
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    questionnaireName: currentQuestionnaire?.questionnaireName,
-    question: currentQuestionnaire?.question,
-    questionnaireDescription: currentQuestionnaire?.questionnaireDescription,
-  });
+  const [formData, setFormData] = useState(
+    
+    {
+    id:id,
+    questionnaireName: currentQuestion?.questionnaireName,
+    question: currentQuestion?.question,
+    questionnaireDescription: currentQuestion?.questionnaireDescription,
+  }
+  
+  );
   const { questionnaireName, questionnaireDescription, question } = formData;
   
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
     setQuestionnaires(data);
   }, []);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,21 +57,22 @@ export default function CreateQuestion() {
     setAnswerType(e);
   };
 
-  
-  const multipleChoices = getLocalStorageItem("multipleChoices");
-  
-  const updateCurrentQuestionnaire = {
+ 
+  const updatecurrentQuestion = {
     questionnaireDescription,
     questionnaireName,
     answerType,
-    question,
+    multipleChoices,
+    question
   };
+
+
 
   const edit = (e) => {
     Object.assign(formData, { answerType: answerType },{multipleChoices});
-    Questionnaires[currentQuestionnaire.indexValue] = formData;
+    Questionnaires[currentQuestion.indexValue] = formData;
     createNewStorageItem("Questionnaires", Questionnaires);
-    createNewStorageItem("currentQuestionnaire", updateCurrentQuestionnaire);
+    createNewStorageItem("currentQuestion", updatecurrentQuestion);
     customAlertTimer(setIsFormSaved);
   };
 
@@ -79,7 +89,7 @@ export default function CreateQuestion() {
   const submit = () => {
     Object.assign(formData, { answerType: answerType },{multipleChoices});
     addToExistingStoredList("Questionnaires", formData);
-    createNewStorageItem("currentQuestionnaire", updateCurrentQuestionnaire);
+    createNewStorageItem("currentQuestion", updatecurrentQuestion);
     customAlertTimer(setIsFormSaved);
     navigate("/preview");
   };
@@ -101,7 +111,7 @@ export default function CreateQuestion() {
 
   return (
     <>
-      {!currentQuestionnaire ? (
+      {!currentQuestion ? (
         <Alert variant="danger">
           Oops, Looks like you have no Questionnaire Yet! Please{" "}
           <a href="/home">Create a Questionnaire to get Started </a>
@@ -214,7 +224,7 @@ export default function CreateQuestion() {
                   </div>
 
                   <div className="card-body">
-                    {!currentQuestionnaire?.indexValue ? (
+                    {!currentQuestion?.indexValue ? (
                       <Button
                         className=" form-control form-control-lg bg-black info text-white text-center "
                         type="submit"
@@ -248,6 +258,8 @@ export default function CreateQuestion() {
                   handleShow={handleShow}
                   setShow={setShow}
                   show={show}
+                  multipleChoices={multipleChoices}
+                  setMultipleChoices={setMultipleChoices}
                   question={question}
                 />
               ) : (

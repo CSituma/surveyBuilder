@@ -4,13 +4,13 @@ import {
   FaPlus,
   FaRegTrashAlt,
 } from "react-icons/fa";
-import { addToExistingStoredList, createNewStorageItem, customAlertTimer, deleteOneItem, } from "../../utils/HelperFunctions";
+import {customAlertTimer, deleteOneItem  } from "../../utils/HelperFunctions";
 
 
-const CheckBox = ({ handleClose }) => {
+const CheckBox = ({ handleClose, multipleChoices, setMultipleChoices}) => {
 
   const [inputFields, setInputFields] = useState([
-    { name: '' }
+    { name:  multipleChoices }
   ])
   const [isDeleted, setIsDeleted] = useState(false);
 
@@ -19,6 +19,7 @@ const CheckBox = ({ handleClose }) => {
     let data = [...inputFields];
     data[index][event.target.name] = event.target.value;
     setInputFields(data);
+
   }
 
   const addNewFields = () => {
@@ -34,7 +35,7 @@ const CheckBox = ({ handleClose }) => {
   }
 
   const submit = () => {
-    createNewStorageItem("multipleChoices", {choices:inputFields});
+    setMultipleChoices(inputFields);
     handleClose();
   }
 

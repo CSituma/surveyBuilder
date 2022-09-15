@@ -36,6 +36,7 @@ export function isObject(object) {
 
 
 
+
 export const checkLocalStorageKey = (key) => {
     let existingKey = localStorage.getItem(key);
     const storageKeyExists=checkIfElementExists(existingKey);
@@ -46,6 +47,8 @@ export const checkLocalStorageKey = (key) => {
         return true;
     }
 }
+
+export const id = "id" + Math.random().toString(16).slice(2);
 
 export const getLocalStorageItem = (key) => {
     const storedItem = localStorage?.getItem(key);
@@ -82,15 +85,15 @@ export function addToExistingStoredList(key, value) {
   } 
 }
 
-export function getCurrentQuestionnaireName() {
-    const data = JSON.parse(localStorage.getItem('currentQuestionnaire'));
+export function getcurrentQuestionName() {
+    const data = JSON.parse(localStorage.getItem('currentQuestion'));
     return data;
 }
 export function createNewStorageItem(key,value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
-export function getCurrentQuestionnaire() {
-    const {questionnaireName} = getCurrentQuestionnaireName();
+export function getcurrentQuestion() {
+    const {questionnaireName} = getcurrentQuestionName();
     const data = JSON.parse(localStorage.getItem(questionnaireName));
     return data;
 }

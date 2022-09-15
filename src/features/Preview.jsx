@@ -1,34 +1,61 @@
 import { useState, useEffect } from "react";
 import { FaEye, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import {
-  addToExistingStoredList,
   checkIfElementExists,
   createNewStorageItem,
   customAlertTimer,
   deleteOneItem,
   getLocalStorageItem,
+  id,
 } from "../utils/HelperFunctions";
-import { Alert } from "react-bootstrap";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
+import { Alert, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import InputFormTypes from "../components/Input/InputFormTypes";
 ///import { useQuestionnairesContextWrapper } from "../context/Questionnaires";
 
 export default function PreviewFeature() {
   const [Questionnaires, setQuestionnaires] = useState([]);
+  const [isDeleted, setIsDeleted] = useState(false);
+  //const [isLoading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const currentQuestion = getLocalStorageItem("currentQuestion");
+  const [Questionnaire, setQuestionnaire] = useState();
+
+  console.log(Questionnaire);
+
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
     setQuestionnaires(data);
   }, []);
 
-  console.log(Questionnaires);
-  const [isDeleted, setIsDeleted] = useState(false);
-  //const [isLoading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  useEffect(() => {
+    const data = Questionnaires?.filter(
+      (questions) =>
+        questions?.questionnaireName === currentQuestion?.questionnaireName
+    );
+    setQuestionnaire(data);
+  }, [Questionnaires, currentQuestion?.questionnaireName]);
+
+  const questionnaireExists = checkIfElementExists(Questionnaire);
+
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const filteredQuestions = Array.from(Questionnaire);
+    const [reorderedQuestions] = filteredQuestions.splice(
+      result.source.index,
+      1
+    );
+    filteredQuestions.splice(result.destination.index, 0, reorderedQuestions);
+    setQuestionnaire(filteredQuestions);
+  };
 
   const editItem = (index, event) => {
-    Questionnaires[index][event.target.name] = event.target.value;
-    Object.assign(Questionnaires[index], { index: index });
-    addToExistingStoredList("currentQuestionnaire", {indexValue:index});
+    Questionnaire[index][event.target.name] = event.target.value;
+    Object.assign(Questionnaire[index], { indexValue: index });
+    createNewStorageItem("currentQuestion", Questionnaire[index]);
     navigate("/createQuestion", { replace: true });
   };
 
@@ -37,28 +64,17 @@ export default function PreviewFeature() {
     deleteOneItem(Questionnaires, index);
     customAlertTimer(setIsDeleted);
     setQuestionnaires(Questionnaires);
-    //const newQtnaire = Questionnaire.splice(Questionnaires[index], 0)
     createNewStorageItem("Questionnaires", Questionnaires);
   };
-  const currentQuestionnaire = getLocalStorageItem("currentQuestionnaire");
-
-  const Questionnaire = Questionnaires?.filter(
-    (questions) =>
-      questions?.questionnaireName === currentQuestionnaire?.questionnaireName
-  );
-  console.log(Questionnaire);
-
-  const questionnaireExists = checkIfElementExists(Questionnaire);
 
   const deleteQuestionnaire = () => {
     setQuestionnaires([]);
-    createNewStorageItem("currentQuestionnaire", []);
-    //Todo:Add Index
+    createNewStorageItem("currentQuestion", []);
   };
 
   return (
     <div className="row">
-      {!currentQuestionnaire ? (
+      {!currentQuestion ? (
         <Alert variant="danger">
           {" "}
           Looks Like you have not Created any Questionnaire Yet Please{" "}
@@ -75,50 +91,82 @@ export default function PreviewFeature() {
 
               <h3 className="card-title">
                 {" "}
-                {currentQuestionnaire?.questionnaireName}
+                {currentQuestion?.questionnaireName}
               </h3>
               {isDeleted ? (
                 <Alert variant="danger"> Question Deleted</Alert>
               ) : (
                 ""
               )}
-              <p> {currentQuestionnaire?.questionnaireDescription}</p>
+              <p> {currentQuestion?.questionnaireDescription}</p>
             </div>
-            {questionnaireExists ? (
-              Questionnaire?.map((questionnaire, index) => (
-                <ul className="" key={index}>
-                  <li className="list-group-item">
-                    <div>
-                      <div>
-                        {index + 1}. {questionnaire?.question}
-                      </div>
-                    </div>
 
-                    <div className="d-flex justify-content-between">
-                      <InputFormTypes formType={questionnaire?.answerType} choices={questionnaire?.multipleChoices} />{" "}
-                      <div>
-                        <FaPencilAlt
-                          className="m-3"
-                          onClick={(event) => editItem(index, event)}
-                        />
-                        <FaTrashAlt
-                          className="m-3"
-                          onClick={(event) => deleteItem(index, event)}
-                        />
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              ))
-            ) : (
-              <>
-                <Alert variant="danger">
-                  {" "}
-                  Looks Like you have not Created any Questions for this
-                  Questionnaire Yet{" "}
-                </Alert>
-              </>
-            )}
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+              <Droppable droppableId={id}>
+                {(provided) => (
+                  <ul {...provided.droppableProps} ref={provided.innerRef}>
+                    {questionnaireExists ? (
+                      Questionnaire?.map((questionnaire, index) => (
+                        <Draggable
+                          key={questionnaire?.id}
+                          draggableId={questionnaire?.id}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <li
+                              className="list-group-item"
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                              ref={provided.innerRef}
+                            >
+                              <Card className="card col-lg-6 m-2 col-sm-12 p-2 bg-secondary text-white shadow-lg rounded">
+                                <div>
+                                  <div>
+                                    {index + 1}. {questionnaire?.question}
+                                  </div>
+                                </div>
+
+                                <div className="d-flex justify-content-between">
+                                  <InputFormTypes
+                                    formType={questionnaire?.answerType}
+                                    choices={questionnaire?.multipleChoices}
+                                  />{" "}
+                                  <div>
+                                    <div className=" z-index-9">
+                                      <FaPencilAlt
+                                        className="m-3"
+                                        onClick={(event) =>
+                                          editItem(index, event)
+                                        }
+                                      />
+                                      <FaTrashAlt
+                                        className="m-3"
+                                        onClick={(event) =>
+                                          deleteItem(index, event)
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </Card>
+                            </li>
+                          )}
+                        </Draggable>
+                      ))
+                    ) : (
+                      <>
+                        <Alert variant="danger">
+                          {" "}
+                          Looks Like you have not Created any Questions for this
+                          Questionnaire Yet{" "}
+                        </Alert>
+                      </>
+                    )}
+                    {provided.placeholder}
+                  </ul>
+                )}
+              </Droppable>
+            </DragDropContext>
           </div>
 
           <div className="card-body">
@@ -129,7 +177,7 @@ export default function PreviewFeature() {
             >
               Delete Questionnaire
             </button>
-            <button type="button" className="btn btn-primary float-end">
+            <button type="button" className="btn btn-primary float-end ">
               <a
                 href="/createQuestion"
                 className="text-white text-decoration-none"

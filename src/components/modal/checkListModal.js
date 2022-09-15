@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+
 import { ListGroup } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import CheckList from '../checkbox';
 
 
-function CheckListModal({ setShow, show, question }) {
+function CheckListModal({ setShow, show, question, multipleChoices, setMultipleChoices }) {
 
   const handleClose = () => setShow(false);
 
@@ -22,11 +21,13 @@ function CheckListModal({ setShow, show, question }) {
         </Modal.Header>
         <Modal.Body>
           <ListGroup variant="flush">
-          <p>Create Multi-Choice Options for {question? question :"your QQuestion"}</p>
-            <CheckList handleClose={handleClose}/>
+            <p>Create Multi-Choice Options for {question ? question : "your QQuestion"}</p>
+            <CheckList handleClose={handleClose}
+              multipleChoices={multipleChoices}
+              setMultipleChoices={setMultipleChoices} />
           </ListGroup>
         </Modal.Body>
-     
+
       </Modal>
     </div>
   );

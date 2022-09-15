@@ -4,7 +4,7 @@ const UserContext = createContext();
 
 export default function UserContextWrapper({ children }) {
   const [User, setUser] = useState({});
-  const userdata = localStorage.getItem('User')
+  const userdata = localStorage.getItem('User');
 
   useEffect(() => {
     try {

@@ -1,7 +1,7 @@
 
 const InputFormTypes = ({ formType, choices }) => {
 
-  console.log(choices.choices.map(choice => choice.name));
+  console.log(choices);
   return (
     <div>
       {formType === "Yes/No" ? (
@@ -42,10 +42,10 @@ const InputFormTypes = ({ formType, choices }) => {
         ) :
           formType === "MultipleChoice" ? (
             <>
-              {choices.choices.map((choice, index) => (
+              {choices.map((choice, index) => (
                 <div className="form-check" key={index}>
                   <input className="form-check-input" type="checkbox" value={choice.name} id="flexCheckDefault" />
-                  <label className="form-check-label" for="flexCheckDefault">
+                  <label className="form-check-label" htmlFor="flexCheckDefault">
                     {choice.name}
                   </label>
                 </div>

@@ -25,7 +25,7 @@ export default function QuestionslIst() {
     const [isDeleted] = useState(false);
 
 
-    const currentQuestionnaire = getLocalStorageItem("currentQuestionnaire");
+    const currentQuestion = getLocalStorageItem("currentQuestion");
 
     const Questionnaire = Questionnaires.filter(questions => new Set(questions.questionnaireName));
 
@@ -35,7 +35,7 @@ export default function QuestionslIst() {
     const deleteQuestionnaire = () => {
 
         setQuestionnaires([]);
-        createNewStorageItem("currentQuestionnaire", []);
+        createNewStorageItem("currentQuestion", []);
         //Todo:Add Index
     }
 
@@ -43,7 +43,7 @@ export default function QuestionslIst() {
     return (
         <div className="row">
 
-            {!currentQuestionnaire ? <Alert variant="danger">
+            {!currentQuestion ? <Alert variant="danger">
                 {" "}
                 Looks Like you have not Created any
                 Questionnaire Yet{" "}
@@ -58,10 +58,10 @@ export default function QuestionslIst() {
 
                                     <h3 className="card-title">
                                         {" "}
-                                        Questionnaire: {currentQuestionnaire?.questionnaireName}
+                                        Questionnaire: {currentQuestion?.questionnaireName}
                                     </h3>
                                     {isDeleted ? <Alert variant="danger"> Question Deleted</Alert> : ""}
-                                    <p> {currentQuestionnaire?.questionnaireDescription}</p>
+                                    <p> {currentQuestion?.questionnaireDescription}</p>
                                 </div>
                                 {questionnaireExists ? (
                                     Questionnaire?.map((questionnaire, index) => (
