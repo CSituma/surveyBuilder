@@ -45,6 +45,24 @@ export default function Preview() {
     const [draggedQuestion] = item.splice(result.source.index, 1);
     item.splice(result.destination.index, 0, draggedQuestion);
     setQuestionnaire(item);
+
+    const originalPosition = Questionnaires.map(
+      (question) => question.id
+    ).indexOf(draggedQuestion.id);
+    const items = Array.from(Questionnaires);
+    const draggedDifference = result.source.index - result.destination.index;
+    
+    const draggedPosition = originalPosition - draggedDifference
+    console.log(draggedPosition);
+    
+       if(draggedDifference>0){ 
+        items.splice(draggedPosition, 0, draggedQuestion)
+    
+      setQuestionnaires(items);
+      createNewStorageItem("Questionnaires", items);
+      }
+    
+
   };
 
   const editItem = (index, event) => {

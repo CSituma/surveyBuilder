@@ -16,7 +16,6 @@ import {
   getcurrentQuestionName,
   getLocalStorageItem,
   id,
-  indexOne,
   isIndexOne,
 } from "../utils/HelperFunctions";
 import { FaEyeSlash } from "react-icons/fa";
@@ -62,10 +61,6 @@ export default function CreateQuestion() {
     question,
   };
 
-console.log( );
- 
-
-
   const currentQuestionnaireIndex =Questionnaires.map(question => question.id).indexOf(currentQuestion.id)
 
   const edit = (e) => {
@@ -80,7 +75,7 @@ console.log( );
     e.preventDefault();
     if (checkIfElementExists(answerType)) {
       edit();
-      setFormData({ question: "", answerType: "" });
+      setFormData({ question: "", answerType: "",id:'' });
     } else {
       customAlertTimer(setFormError);
     }
@@ -99,7 +94,7 @@ console.log( );
       e.preventDefault();
       if (checkIfElementExists(answerType)) {
         submit();
-        setFormData({ question: "", answerType: "" });
+        setFormData({ question: "", answerType: "",id:'' });
       } else {
         customAlertTimer(setFormError);
       }
