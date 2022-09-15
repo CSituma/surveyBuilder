@@ -16,6 +16,8 @@ import {
   getcurrentQuestionName,
   getLocalStorageItem,
   id,
+  indexOne,
+  isIndexOne,
 } from "../utils/HelperFunctions";
 import { FaEyeSlash } from "react-icons/fa";
 import CheckListModal from "../components/modal/checkListModal";
@@ -29,25 +31,20 @@ export default function CreateQuestion() {
   const [multipleChoices, setMultipleChoices] = useState([]);
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
- 
   const navigate = useNavigate();
-  const [formData, setFormData] = useState(
-    
-    {
-    id:id,
+
+  const [formData, setFormData] = useState({
+    id: id,
     questionnaireName: currentQuestion?.questionnaireName,
     question: currentQuestion?.question,
     questionnaireDescription: currentQuestion?.questionnaireDescription,
-  }
-  
-  );
+  });
   const { questionnaireName, questionnaireDescription, question } = formData;
-  
+
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
     setQuestionnaires(data);
   }, []);
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,20 +54,23 @@ export default function CreateQuestion() {
     setAnswerType(e);
   };
 
- 
   const updatecurrentQuestion = {
     questionnaireDescription,
     questionnaireName,
     answerType,
     multipleChoices,
-    question
+    question,
   };
 
+console.log( );
+ 
 
+
+  const currentQuestionnaireIndex =Questionnaires.map(question => question.id).indexOf(currentQuestion.id)
 
   const edit = (e) => {
-    Object.assign(formData, { answerType: answerType },{multipleChoices});
-    Questionnaires[currentQuestion.indexValue] = formData;
+    Object.assign(formData, { answerType: answerType }, { multipleChoices });
+    Questionnaires[currentQuestionnaireIndex] = formData;
     createNewStorageItem("Questionnaires", Questionnaires);
     createNewStorageItem("currentQuestion", updatecurrentQuestion);
     customAlertTimer(setIsFormSaved);
@@ -87,7 +87,7 @@ export default function CreateQuestion() {
   };
 
   const submit = () => {
-    Object.assign(formData, { answerType: answerType },{multipleChoices});
+    Object.assign(formData, { answerType: answerType }, { multipleChoices });
     addToExistingStoredList("Questionnaires", formData);
     createNewStorageItem("currentQuestion", updatecurrentQuestion);
     customAlertTimer(setIsFormSaved);
@@ -137,7 +137,13 @@ export default function CreateQuestion() {
                     </a>{" "}
                   </Button>
                 </div>
-                <div className="text-secondary">
+             
+
+                <form
+                  onSubmit={handleSubmit}
+                  className="border shadow-lg p-5 border-secondary"
+                >
+   <div className="text-secondary">
                   <textarea
                     type="text"
                     className="form-control form-control-lg text-center  border-0"
@@ -151,7 +157,7 @@ export default function CreateQuestion() {
                     title="Edit Questionnaire Name"
                     aria-label="Questionnaire Name Input"
                     required
-                  ></textarea>
+                  />
                 </div>
                 <div className="text-secondary ">
                   <textarea
@@ -160,21 +166,16 @@ export default function CreateQuestion() {
                     onChange={handleChange}
                     value={questionnaireDescription}
                     name="questionnaireDescription"
-                    placeholder="Write  short Description of Questionnaire"
+                    placeholder="short Description of Questionnaire"
                     id="questionnaireDescription"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="Write  short Description of Questionnaire"
+                    title="short Description of Questionnaire"
                     aria-label="Questionnaire Description Input"
                     required
-                  ></textarea>
+                  />
                 </div>
                 <br />
-
-                <form
-                  onSubmit={handleSubmit}
-                  className="border shadow-lg p-5 border-secondary"
-                >
                   <div className="col-12">
                     <textarea
                       className="form-control form-control-lg text-center"
@@ -224,7 +225,7 @@ export default function CreateQuestion() {
                   </div>
 
                   <div className="card-body">
-                    {!currentQuestion?.indexValue ? (
+                    {!currentQuestion?.indexValue && !isIndexOne(currentQuestion?.indexValue)? (
                       <Button
                         className=" form-control form-control-lg bg-black info text-white text-center "
                         type="submit"

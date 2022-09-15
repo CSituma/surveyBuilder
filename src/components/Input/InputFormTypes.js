@@ -1,7 +1,7 @@
 
 const InputFormTypes = ({ formType, choices }) => {
 
-  console.log(choices);
+
   return (
     <div>
       {formType === "Yes/No" ? (

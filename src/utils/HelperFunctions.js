@@ -24,6 +24,7 @@ export function isObject(object) {
     if (index > -1) { 
       array.splice(index, 1); 
     }
+   return array
   }
 
 
@@ -35,6 +36,10 @@ export function isObject(object) {
   }
 
 
+export const isIndexOne = (index)=>{
+if(index===0){ return true}
+return false;
+}
 
 
 export const checkLocalStorageKey = (key) => {
@@ -58,6 +63,7 @@ export const getLocalStorageItem = (key) => {
     return storageData}
 
     } catch (error) {
+      console.log(error);
       // TODO: better error handling
     }
   
@@ -99,3 +105,21 @@ export function getcurrentQuestion() {
 }
 
 
+////////Under Construction
+
+export  const customDragDrop =(Questionnaires,draggedQuestion,result) =>{
+
+const originalPosition = Questionnaires.map(
+  (question) => question.id
+).indexOf(draggedQuestion.id);
+const items = Array.from(Questionnaires);
+const draggedDifference = result.source.index - result.destination.index;
+
+const draggedPosition = originalPosition - draggedDifference
+console.log(draggedPosition);
+
+   if(draggedDifference>0){ 
+    items.splice(draggedPosition, 0, draggedQuestion)
+
+  }
+}
