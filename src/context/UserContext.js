@@ -14,7 +14,7 @@ export default function UserContextWrapper({ children }) {
     }
   }, [userdata])
 
-  console.log(User)
+
   return (
     <UserContext.Provider value={{ User }}>
       {children}

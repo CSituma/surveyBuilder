@@ -4,22 +4,23 @@ import {
   FaPlus,
   FaRegTrashAlt,
 } from "react-icons/fa";
-import {customAlertTimer, deleteOneItem  } from "../../utils/HelperFunctions";
+import { customAlertTimer, deleteOneItem } from "../../utils/HelperFunctions";
 
 
-const CheckBox = ({ handleClose, multipleChoices, setMultipleChoices}) => {
+const CheckBox = ({ handleClose, multipleChoices, setMultipleChoices }) => {
 
-  const [inputFields, setInputFields] = useState([
-    { name:  multipleChoices }
-  ])
+
+ const inputData = multipleChoices.map((input => input))
+console.log(inputData);
+
+  const [inputFields, setInputFields] = useState(inputData)
+  
+  
   const [isDeleted, setIsDeleted] = useState(false);
-
-
   const handleFormChange = (index, event) => {
     let data = [...inputFields];
     data[index][event.target.name] = event.target.value;
     setInputFields(data);
-
   }
 
   const addNewFields = () => {
@@ -33,6 +34,7 @@ const CheckBox = ({ handleClose, multipleChoices, setMultipleChoices}) => {
     deleteOneItem(inputFields, index);
     customAlertTimer(setIsDeleted);
   }
+  console.log(multipleChoices);
 
   const submit = () => {
     setMultipleChoices(inputFields);

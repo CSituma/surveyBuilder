@@ -22,24 +22,25 @@ import { FaEyeSlash } from "react-icons/fa";
 import CheckListModal from "../components/modal/checkListModal";
 import { useNavigate } from "react-router-dom";
 export default function CreateQuestion() {
-  const [answerType, setAnswerType] = useState("");
+ 
   const [formError, setFormError] = useState(false);
   const [isFormSaved, setIsFormSaved] = useState(false);
   const currentQuestion = getcurrentQuestionName();
   const [Questionnaires, setQuestionnaires] = useState([]);
   const [multipleChoices, setMultipleChoices] = useState([]);
-  const [show, setShow] = useState(false);
-  const handleShow = () => setShow(true);
   const navigate = useNavigate();
+
 
   const [formData, setFormData] = useState({
     id: id,
+    answerType:currentQuestion?.answerType,
     questionnaireName: currentQuestion?.questionnaireName,
     question: currentQuestion?.question,
     questionnaireDescription: currentQuestion?.questionnaireDescription,
   });
   const { questionnaireName, questionnaireDescription, question } = formData;
-
+  const [answerType, setAnswerType] = useState(formData?.answerType);
+  
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
     setQuestionnaires(data);
@@ -61,7 +62,9 @@ export default function CreateQuestion() {
     question,
   };
 
-  const currentQuestionnaireIndex =Questionnaires?.map(question => question.id).indexOf(currentQuestion?.id)
+  const currentQuestionnaireIndex = Questionnaires?.map(
+    (question) => question.id
+  ).indexOf(currentQuestion?.id);
 
   const edit = (e) => {
     Object.assign(formData, { answerType: answerType }, { multipleChoices });
@@ -75,7 +78,7 @@ export default function CreateQuestion() {
     e.preventDefault();
     if (checkIfElementExists(answerType)) {
       edit();
-      setFormData({ question: "", answerType: "",id:'' });
+      setFormData({ question: "", answerType: "", id: "" });
     } else {
       customAlertTimer(setFormError);
     }
@@ -94,7 +97,7 @@ export default function CreateQuestion() {
       e.preventDefault();
       if (checkIfElementExists(answerType)) {
         submit();
-        setFormData({ question: "", answerType: "",id:'' });
+        setFormData({ question: "", answerType: "", id: "" });
       } else {
         customAlertTimer(setFormError);
       }
@@ -103,7 +106,7 @@ export default function CreateQuestion() {
       // TODO: better error handling
     }
   };
-
+ 
   return (
     <>
       {!currentQuestion ? (
@@ -112,9 +115,9 @@ export default function CreateQuestion() {
           <a href="/home">Create a Questionnaire to get Started </a>
         </Alert>
       ) : (
-        <Row xs={1} md={2} className="g-4">
+        <Row className="g-4">
           <Col>
-            <Card className="text-center shadow-lg row bg-white  bg-body rounded ">
+            <Card className="text-center createForm shadow-lg row bg-white bg-body rounded">
               <Card.Body className="shadow-lg bg-body rounded ">
                 {isFormSaved ? (
                   <Alert variant="success"> Question Succesfully Saved </Alert>
@@ -132,45 +135,44 @@ export default function CreateQuestion() {
                     </a>{" "}
                   </Button>
                 </div>
-             
 
                 <form
                   onSubmit={handleSubmit}
                   className="border shadow-lg p-5 border-secondary"
                 >
-   <div className="text-secondary">
-                  <textarea
-                    type="text"
-                    className="form-control form-control-lg text-center  border-0"
-                    onChange={handleChange}
-                    value={questionnaireName}
-                    name="questionnaireName"
-                    id="questionnaireName"
-                    data-toggle="tooltip"
-                    placeholder="Questionnaire Name"
-                    data-placement="top"
-                    title="Edit Questionnaire Name"
-                    aria-label="Questionnaire Name Input"
-                    required
-                  />
-                </div>
-                <div className="text-secondary ">
-                  <textarea
-                    type="text"
-                    className="form-control form-control-lg text-center border-top-0"
-                    onChange={handleChange}
-                    value={questionnaireDescription}
-                    name="questionnaireDescription"
-                    placeholder="short Description of Questionnaire"
-                    id="questionnaireDescription"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="short Description of Questionnaire"
-                    aria-label="Questionnaire Description Input"
-                    required
-                  />
-                </div>
-                <br />
+                  <div className="text-secondary">
+                    <textarea
+                      type="text"
+                      className="form-control form-control-lg text-center  border-0"
+                      onChange={handleChange}
+                      value={questionnaireName}
+                      name="questionnaireName"
+                      id="questionnaireName"
+                      data-toggle="tooltip"
+                      placeholder="Questionnaire Name"
+                      data-placement="top"
+                      title="Edit Questionnaire Name"
+                      aria-label="Questionnaire Name Input"
+                      required
+                    />
+                  </div>
+                  <div className="text-secondary ">
+                    <textarea
+                      type="text"
+                      className="form-control form-control-lg text-center border-top-0"
+                      onChange={handleChange}
+                      value={questionnaireDescription}
+                      name="questionnaireDescription"
+                      placeholder="short Description of Questionnaire"
+                      id="questionnaireDescription"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="short Description of Questionnaire"
+                      aria-label="Questionnaire Description Input"
+                      required
+                    />
+                  </div>
+                  <br />
                   <div className="col-12">
                     <textarea
                       className="form-control form-control-lg text-center"
@@ -194,11 +196,11 @@ export default function CreateQuestion() {
                     ""
                   )}
 
-                  <div className="d-flex text-center">
-                    <Card.Title>ANSWER:</Card.Title>
+                  <div >
+                    <Card.Title> ANSWER:</Card.Title>
 
                     <DropdownButton
-                      title={answerType}
+                      title={answerType ? answerType: currentQuestion?.answerType}
                       variant="dark"
                       id="dropdown-menu-align-right"
                       required
@@ -210,7 +212,7 @@ export default function CreateQuestion() {
                       <Dropdown.Item eventKey="Yes/No">Yes/No </Dropdown.Item>
                       <Dropdown.Item
                         eventKey="MultipleChoice"
-                        onClick={handleShow}
+                     
                       >
                         Multiple Choice
                       </Dropdown.Item>
@@ -220,7 +222,8 @@ export default function CreateQuestion() {
                   </div>
 
                   <div className="card-body">
-                    {!currentQuestion?.indexValue && !isIndexOne(currentQuestion?.indexValue)? (
+                    {!currentQuestion?.indexValue &&
+                    !isIndexOne(currentQuestion?.indexValue) ? (
                       <Button
                         className=" form-control form-control-lg bg-black info text-white text-center "
                         type="submit"
@@ -249,12 +252,10 @@ export default function CreateQuestion() {
                   </div>
                 </form>
               </Card.Body>
-              {answerType === "MultipleChoice" ? (
+              {answerType === "MultipleChoice" || 
+              checkIfElementExists(currentQuestion?.multipleChoices) ? (
                 <CheckListModal
-                  handleShow={handleShow}
-                  setShow={setShow}
-                  show={show}
-                  multipleChoices={multipleChoices}
+                  multipleChoices ={currentQuestion?.multipleChoices}
                   setMultipleChoices={setMultipleChoices}
                   question={question}
                 />

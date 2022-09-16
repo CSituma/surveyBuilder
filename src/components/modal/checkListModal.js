@@ -1,16 +1,20 @@
-
+import {useState} from "react"
 import { ListGroup } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import CheckList from '../checkbox';
 
 
-function CheckListModal({ setShow, show, question, multipleChoices, setMultipleChoices }) {
+function CheckListModal({  question, multipleChoices, setMultipleChoices }) {
+  const [show, setShow] = useState(true);
+  const handleShow = () => setShow(true);
+
 
   const handleClose = () => setShow(false);
 
   return (
     <div>
       <Modal
+        onShow={handleShow}
         show={show}
         onHide={handleClose}
         backdrop="static"
