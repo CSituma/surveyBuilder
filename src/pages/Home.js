@@ -1,16 +1,19 @@
 import { Button } from "react-bootstrap";
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import ModalComponent from "../components/modal/InputModal";
-import { useUserContextWrapper } from "../context/UserContext";
-
 const Home = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [user,setUser] = useState('')
 
-  const user = useUserContextWrapper();
+  useEffect(() => {
+    const userdata = localStorage.getItem("User");
+    setUser(userdata);
+  }, [setUser]);
 
+  console.log(user);
   return (
     <div className="home">
       <p className="text-center p-5">Welcome, {user}🤗</p>

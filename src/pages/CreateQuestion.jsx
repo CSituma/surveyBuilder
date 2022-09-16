@@ -33,14 +33,16 @@ export default function CreateQuestion() {
 
   const [formData, setFormData] = useState({
     id: id,
-    answerType:currentQuestion?.answerType,
+    answerType:currentQuestion.indexValue? currentQuestion?.answerType:'',
     questionnaireName: currentQuestion?.questionnaireName,
-    question: currentQuestion?.question,
+    question: currentQuestion.indexValue? currentQuestion?.question: '',
     questionnaireDescription: currentQuestion?.questionnaireDescription,
   });
-  const { questionnaireName, questionnaireDescription, question } = formData;
-  const [answerType, setAnswerType] = useState(formData?.answerType);
-  
+
+console.log(formData.multipleChoices);
+
+  const { questionnaireName, questionnaireDescription, question, answerType} = formData;
+
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
     setQuestionnaires(data);
@@ -51,7 +53,7 @@ export default function CreateQuestion() {
     setFormData({ ...formData, [name]: value });
   };
   const handleSelect = (e) => {
-    setAnswerType(e);
+    setFormData({ ...formData, answerType:e });
   };
 
   const updatecurrentQuestion = {
@@ -67,7 +69,7 @@ export default function CreateQuestion() {
   ).indexOf(currentQuestion?.id);
 
   const edit = (e) => {
-    Object.assign(formData, { answerType: answerType }, { multipleChoices });
+    Object.assign(formData, {multipleChoices:multipleChoices});
     Questionnaires[currentQuestionnaireIndex] = formData;
     createNewStorageItem("Questionnaires", Questionnaires);
     createNewStorageItem("currentQuestion", updatecurrentQuestion);
@@ -78,16 +80,17 @@ export default function CreateQuestion() {
     e.preventDefault();
     if (checkIfElementExists(answerType)) {
       edit();
-      setFormData({ question: "", answerType: "", id: "" });
+      setFormData({ question: "", answerType: "", id: "" ,multipleChoices:''});
     } else {
       customAlertTimer(setFormError);
     }
   };
 
   const submit = () => {
-    Object.assign(formData, { answerType: answerType }, { multipleChoices });
+    Object.assign(formData, {multipleChoices:multipleChoices});
     addToExistingStoredList("Questionnaires", formData);
     createNewStorageItem("currentQuestion", updatecurrentQuestion);
+    setFormData({ question: "", answerType: "", id: "" ,multipleChoices:''});
     customAlertTimer(setIsFormSaved);
     navigate("/preview");
   };
@@ -97,7 +100,6 @@ export default function CreateQuestion() {
       e.preventDefault();
       if (checkIfElementExists(answerType)) {
         submit();
-        setFormData({ question: "", answerType: "", id: "" });
       } else {
         customAlertTimer(setFormError);
       }
@@ -200,7 +202,7 @@ export default function CreateQuestion() {
                     <Card.Title> ANSWER:</Card.Title>
 
                     <DropdownButton
-                      title={answerType ? answerType: currentQuestion?.answerType}
+                      title={answerType}
                       variant="dark"
                       id="dropdown-menu-align-right"
                       required
@@ -225,7 +227,7 @@ export default function CreateQuestion() {
                     {!currentQuestion?.indexValue &&
                     !isIndexOne(currentQuestion?.indexValue) ? (
                       <Button
-                        className=" form-control form-control-lg bg-black info text-white text-center "
+                        className=" form-control form-control-lg bg-primary info text-white text-center "
                         type="submit"
                         data-toggle="tooltip"
                         data-placement="top"
@@ -237,7 +239,7 @@ export default function CreateQuestion() {
                       </Button>
                     ) : (
                       <Button
-                        className=" form-control form-control-lg bg-black text-white info text-center "
+                        className=" form-control form-control-lg bg-primary  text-white info text-center "
                         type="button"
                         onClick={handleEdit}
                         data-toggle="tooltip"
@@ -252,8 +254,7 @@ export default function CreateQuestion() {
                   </div>
                 </form>
               </Card.Body>
-              {answerType === "MultipleChoice" || 
-              checkIfElementExists(currentQuestion?.multipleChoices) ? (
+              {answerType === "MultipleChoice" ? (
                 <CheckListModal
                   multipleChoices ={currentQuestion?.multipleChoices}
                   setMultipleChoices={setMultipleChoices}

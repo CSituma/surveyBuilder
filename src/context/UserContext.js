@@ -1,22 +1,13 @@
 
-import { useState, useContext, createContext, useEffect } from "react";
+import { useState, useContext, createContext } from "react";
 const UserContext = createContext();
 
 export default function UserContextWrapper({ children }) {
   const [User, setUser] = useState({});
-  const userdata = localStorage.getItem('User');
-
-  useEffect(() => {
-    try {
-      setUser(userdata);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [userdata])
-
+ 
 
   return (
-    <UserContext.Provider value={{ User }}>
+    <UserContext.Provider value={[User, setUser]}>
       {children}
     </UserContext.Provider>
   );
