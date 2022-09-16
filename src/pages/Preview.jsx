@@ -7,6 +7,7 @@ import {
   deleteOneItem,
   getLocalStorageItem,
   id,
+  edit
 } from "../utils/HelperFunctions";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -50,7 +51,7 @@ export default function Preview() {
 
   const editItem = (index, event) => {
     Questionnaire[index][event.target.name] = event.target.value;
-    Object.assign(Questionnaire[index],{edit:true});
+    Object.assign(Questionnaire[index],{edit:false});
     createNewStorageItem("currentQuestion", Questionnaire[index]);
     navigate("/createQuestion", { replace: true });
   };

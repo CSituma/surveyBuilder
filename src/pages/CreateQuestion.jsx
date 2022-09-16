@@ -30,9 +30,9 @@ export default function CreateQuestion() {
 
   const [formData, setFormData] = useState({
     id: id,
-    answerType: currentQuestion.edit ? currentQuestion?.answerType : "",
+    answerType: currentQuestion?.edit ? currentQuestion?.answerType : "",
     questionnaireName: currentQuestion?.questionnaireName,
-    question: currentQuestion.edit? currentQuestion?.question : "",
+    question: currentQuestion?.edit? currentQuestion?.question : "",
     questionnaireDescription: currentQuestion?.questionnaireDescription,
   });
 
