@@ -7,12 +7,11 @@ import {
 import { customAlertTimer, deleteOneItem } from "../../utils/HelperFunctions";
 
 
-const CheckBox = ({ handleClose, multipleChoices, setMultipleChoices }) => {
+const CheckBox = ({ handleClose, multipleChoices=[{name:''}], setMultipleChoices }) => {
 
 
- const inputData = multipleChoices.map((input => input))
-console.log(inputData);
-
+ const inputData = multipleChoices?.map((input => input))
+console.log(multipleChoices);
   const [inputFields, setInputFields] = useState(inputData)
   
   
@@ -34,7 +33,7 @@ console.log(inputData);
     deleteOneItem(inputFields, index);
     customAlertTimer(setIsDeleted);
   }
-  console.log(multipleChoices);
+  
 
   const submit = () => {
     setMultipleChoices(inputFields);

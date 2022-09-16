@@ -16,13 +16,11 @@ import {
   getcurrentQuestionName,
   getLocalStorageItem,
   id,
-  isIndexOne,
 } from "../utils/HelperFunctions";
 import { FaEyeSlash } from "react-icons/fa";
 import CheckListModal from "../components/modal/checkListModal";
 import { useNavigate } from "react-router-dom";
 export default function CreateQuestion() {
- 
   const [formError, setFormError] = useState(false);
   const [isFormSaved, setIsFormSaved] = useState(false);
   const currentQuestion = getcurrentQuestionName();
@@ -30,18 +28,18 @@ export default function CreateQuestion() {
   const [multipleChoices, setMultipleChoices] = useState([]);
   const navigate = useNavigate();
 
-
   const [formData, setFormData] = useState({
     id: id,
-    answerType:currentQuestion.indexValue? currentQuestion?.answerType:'',
+    answerType: currentQuestion.edit ? currentQuestion?.answerType : "",
     questionnaireName: currentQuestion?.questionnaireName,
-    question: currentQuestion.indexValue? currentQuestion?.question: '',
+    question: currentQuestion.edit? currentQuestion?.question : "",
     questionnaireDescription: currentQuestion?.questionnaireDescription,
   });
 
-console.log(formData.multipleChoices);
+  console.log(formData.multipleChoices);
 
-  const { questionnaireName, questionnaireDescription, question, answerType} = formData;
+  const { questionnaireName, questionnaireDescription, question, answerType } =
+    formData;
 
   useEffect(() => {
     const data = getLocalStorageItem("Questionnaires");
@@ -53,7 +51,7 @@ console.log(formData.multipleChoices);
     setFormData({ ...formData, [name]: value });
   };
   const handleSelect = (e) => {
-    setFormData({ ...formData, answerType:e });
+    setFormData({ ...formData, answerType: e });
   };
 
   const updatecurrentQuestion = {
@@ -69,7 +67,7 @@ console.log(formData.multipleChoices);
   ).indexOf(currentQuestion?.id);
 
   const edit = (e) => {
-    Object.assign(formData, {multipleChoices:multipleChoices});
+    Object.assign(formData, { multipleChoices: multipleChoices });
     Questionnaires[currentQuestionnaireIndex] = formData;
     createNewStorageItem("Questionnaires", Questionnaires);
     createNewStorageItem("currentQuestion", updatecurrentQuestion);
@@ -80,17 +78,23 @@ console.log(formData.multipleChoices);
     e.preventDefault();
     if (checkIfElementExists(answerType)) {
       edit();
-      setFormData({ question: "", answerType: "", id: "" ,multipleChoices:''});
+      setFormData({
+        question: "",
+        answerType: "",
+        id: "",
+        multipleChoices: "",
+      });
+      navigate("/preview");
     } else {
       customAlertTimer(setFormError);
     }
   };
 
   const submit = () => {
-    Object.assign(formData, {multipleChoices:multipleChoices});
+    Object.assign(formData, { multipleChoices: multipleChoices });
     addToExistingStoredList("Questionnaires", formData);
     createNewStorageItem("currentQuestion", updatecurrentQuestion);
-    setFormData({ question: "", answerType: "", id: "" ,multipleChoices:''});
+    setFormData({ question: "", answerType: "", id: "", multipleChoices: "" });
     customAlertTimer(setIsFormSaved);
     navigate("/preview");
   };
@@ -108,7 +112,7 @@ console.log(formData.multipleChoices);
       // TODO: better error handling
     }
   };
- 
+
   return (
     <>
       {!currentQuestion ? (
@@ -198,7 +202,7 @@ console.log(formData.multipleChoices);
                     ""
                   )}
 
-                  <div >
+                  <div>
                     <Card.Title> ANSWER:</Card.Title>
 
                     <DropdownButton
@@ -212,10 +216,7 @@ console.log(formData.multipleChoices);
                       <Dropdown.Item eventKey="Text">Text</Dropdown.Item>
                       <Dropdown.Item eventKey="Number">Number</Dropdown.Item>
                       <Dropdown.Item eventKey="Yes/No">Yes/No </Dropdown.Item>
-                      <Dropdown.Item
-                        eventKey="MultipleChoice"
-                     
-                      >
+                      <Dropdown.Item eventKey="MultipleChoice">
                         Multiple Choice
                       </Dropdown.Item>
                       <Dropdown.Divider />
@@ -224,8 +225,7 @@ console.log(formData.multipleChoices);
                   </div>
 
                   <div className="card-body">
-                    {!currentQuestion?.indexValue &&
-                    !isIndexOne(currentQuestion?.indexValue) ? (
+                    {!currentQuestion.edit ? (
                       <Button
                         className=" form-control form-control-lg bg-primary info text-white text-center "
                         type="submit"
@@ -256,7 +256,7 @@ console.log(formData.multipleChoices);
               </Card.Body>
               {answerType === "MultipleChoice" ? (
                 <CheckListModal
-                  multipleChoices ={currentQuestion?.multipleChoices}
+                  multipleChoices={currentQuestion?.multipleChoices}
                   setMultipleChoices={setMultipleChoices}
                   question={question}
                 />
