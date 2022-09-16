@@ -51,7 +51,7 @@ export default function Preview() {
 
   const editItem = (index, event) => {
     Questionnaire[index][event.target.name] = event.target.value;
-    Object.assign(Questionnaire[index],{edit:false});
+    Object.assign(Questionnaire[index],{edit:true});
     createNewStorageItem("currentQuestion", Questionnaire[index]);
     navigate("/createQuestion", { replace: true });
   };
